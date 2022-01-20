@@ -2,6 +2,9 @@
 //THE TEST SERVER IS RUNNING ON LOCALHOST:3000//
 ////////////////////////////////////////////////
 
+
+
+
 // PROBLEM 1
 /*
     In the index.html file in this folder there is a button with an id of 'say-hello-button'!
@@ -10,6 +13,7 @@
 */
 
 // CODE HERE
+let sayHelloButton= document.querySelector('#say-hello-button')
 
 
 // PROBLEM 2
@@ -20,6 +24,10 @@
 */
 
 // CODE HERE
+sayHelloButton.addEventListener('mouseover',function(){
+    sayHelloButton.style.backgroundColor = 'green';
+    sayHelloButton.style.color = 'white';
+})
 
 
 // PROBLEM 3
@@ -32,6 +40,10 @@
 */
 
 // CODE HERE
+sayHelloButton.addEventListener('mouseout',function(){
+    sayHelloButton.style.backgroundColor = '#EFEFEF';
+    sayHelloButton.style.color = 'black';
+})
 
 
 // PROBLEM 4
@@ -53,6 +65,7 @@ const sayHello = () => {
 // DO NOT EDIT FUNCTION
 
 // CODE HERE
+sayHelloButton.addEventListener('click',sayHello)
 
 
 // PROBLEM 5 
@@ -67,7 +80,14 @@ const sayHello = () => {
 */ 
 
 const ohMy = () => {
-    // YOUR CODE HERE
+    axios
+    .get( 'http://localhost:3000/animals' )
+    .then(res => {
+        res.data
+        console.log(res.data)
+    })
+    .catch(err=> console.log(err))
+
 }
 
 document.getElementById('animals-button').addEventListener('click', ohMy)
@@ -87,8 +107,20 @@ document.getElementById('animals-button').addEventListener('click', ohMy)
 */
 
 const repeatMyParam = () => {
-    //YOUR CODE HERE
+    axios 
+    .get( `http://localhost:3000/repeat/'testing1,2'`)
+    .then(res =>{
+        res.data
+        console.log(res.data)
+
+    })
+    .catch(err=> console.log(err));
+    let repeatText = document.getElementById('repeat-text')
+    repeatText.style.display = 'block';
+    repeatText.textContent = res.data;
+
 }
+document.getElementById('animals-button').addEventListener('click',repeatMyParam)
 
 // PROBLEM 7
 /*
@@ -111,6 +143,13 @@ const repeatMyParam = () => {
 */
 
 // CODE HERE
+const  getRequest = () => {
+    axios
+    .get('http://localhost:3000/repeat?myquery=a-really-awesome-query&anotherOne=DJ-Khalid')
+    .then(({data}) => console.log(data))
+    
+}
+let queryBtn = document.getElementById('query-button').addEventListener('click',getRequest)
 
 
 
@@ -164,3 +203,27 @@ const repeatMyParam = () => {
 */
 
 // CODE HERE 
+function createFood(){
+    const foodInput = document.querySelector('#add-food')
+
+    const body = {
+        newFood: foodInput.value
+    }
+    axios
+        .post('http://localhost:3000/food', body)
+        .then(function(){
+                console.log(res.data)
+
+                const foodList = document.querySelector('section');
+                foodList.innerHTML = '';
+                res.data.forEach(foodStr => {
+                    const newP =document.createElement('p')
+                    newP.textcontent = foodStr;
+
+                    foodList.appendChild(newP)
+                })
+        })
+        .catch(err => console.log(err))
+}
+
+document.querySelector('form').addEventListener('submit',createFood)
